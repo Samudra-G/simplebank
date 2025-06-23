@@ -1,6 +1,6 @@
 module github.com/Samudra-G/simplebank
 
-go 1.24.2
+go 1.24
 
 require (
 	github.com/lib/pq v1.10.9

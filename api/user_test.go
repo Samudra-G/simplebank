@@ -168,7 +168,7 @@ func TestCreateUserAPI(t *testing.T) {
 			store := mockdb.NewMockStore(ctrl)
 			tc.buildStubs(store)
 
-			server := NewServer(store)
+			server := newTestServer(t, store)
 			rec := httptest.NewRecorder()
 
 			data, err := json.Marshal(tc.body)
@@ -201,7 +201,7 @@ func randomUser(t *testing.T) (db.User, string) {
 
 func requireBodyMatchUser(t *testing.T, body *bytes.Buffer, user db.User) {
 	data := body.Bytes()
-	var got createUserResponse
+	var got userResponse
 	err := json.Unmarshal(data, &got)
 	require.NoError(t, err)
 

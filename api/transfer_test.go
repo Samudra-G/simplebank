@@ -18,8 +18,10 @@ import (
 )
 
 func TestCreateTransferAPI(t *testing.T){
-	account1 := randomAccount()
-	account2 := randomAccount()
+	user1, _ := randomUser(t)
+	user2, _ := randomUser(t)
+	account1 := randomAccount(user1.Username)
+	account2 := randomAccount(user2.Username)
 	account1.Currency = "USD"
 	account2.Currency = "USD"
 

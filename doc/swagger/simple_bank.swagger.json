@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "Simple Bank",
-    "version": "1.0",
+    "version": "1.1",
     "contact": {
       "name": "Samudra G",
       "url": "https://github.com/Samudra-G",
@@ -23,6 +23,8 @@
   "paths": {
     "/v1/create_user": {
       "post": {
+        "summary": "Create User",
+        "description": "Use this API to create a new user in the Simple Bank system.",
         "operationId": "SimpleBank_CreateUser",
         "responses": {
           "200": {
@@ -55,6 +57,8 @@
     },
     "/v1/login_user": {
       "post": {
+        "summary": "Login User",
+        "description": "Use this API to login user and get the Access and Refresh token.",
         "operationId": "SimpleBank_LoginUser",
         "responses": {
           "200": {

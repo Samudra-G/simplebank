@@ -1,14 +1,25 @@
 -- SQL dump generated using DBML (dbml.dbdiagram.io)
 -- Database: PostgreSQL
--- Generated at: 2025-07-15T17:33:35.707Z
+-- Generated at: 2025-08-07T17:11:40.328Z
 
 CREATE TABLE "users" (
   "username" varchar PRIMARY KEY,
   "hashed_password" varchar NOT NULL,
   "full_name" varchar NOT NULL,
   "email" varchar UNIQUE NOT NULL,
+  "is_email_verified" boolean NOT NULL DEFAULT false,
   "password_changed_at" timestamptz NOT NULL DEFAULT '0001-01-01 00:00:00Z',
-  "created_at" timestamptz NOT NULL DEFAULT 'now()'
+  "created_at" timestamptz NOT NULL DEFAULT (now())
+);
+
+CREATE TABLE "verify_emails" (
+  "id" bigserial PRIMARY KEY,
+  "username" varchar NOT NULL,
+  "email" varchar NOT NULL,
+  "secret_code" varchar NOT NULL,
+  "is_used" bool NOT NULL DEFAULT false,
+  "created_at" timestamptz NOT NULL DEFAULT (now()),
+  "expired_at" timestamptz NOT NULL DEFAULT (now() + interval '15 minutes')
 );
 
 CREATE TABLE "accounts" (
@@ -16,14 +27,14 @@ CREATE TABLE "accounts" (
   "owner" varchar NOT NULL,
   "balance" bigint NOT NULL,
   "currency" varchar NOT NULL,
-  "created_at" timestamptz NOT NULL DEFAULT 'now()'
+  "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "entries" (
   "id" integer PRIMARY KEY,
   "account_id" bigint NOT NULL,
   "amount" bigint NOT NULL,
-  "created_at" timestamptz NOT NULL DEFAULT 'now()'
+  "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "transfers" (
@@ -31,7 +42,7 @@ CREATE TABLE "transfers" (
   "from_account_id" bigint NOT NULL,
   "to_account_id" bigint NOT NULL,
   "amount" bigint NOT NULL,
-  "created_at" timestamptz NOT NULL DEFAULT 'now()'
+  "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "sessions" (
@@ -60,6 +71,8 @@ CREATE INDEX ON "transfers" ("from_account_id", "to_account_id");
 COMMENT ON COLUMN "entries"."amount" IS 'can be +ve and -ve';
 
 COMMENT ON COLUMN "transfers"."amount" IS 'must be +ve';
+
+ALTER TABLE "verify_emails" ADD FOREIGN KEY ("username") REFERENCES "users" ("username");
 
 ALTER TABLE "accounts" ADD FOREIGN KEY ("owner") REFERENCES "users" ("username");
 
